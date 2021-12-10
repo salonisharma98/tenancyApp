@@ -38,14 +38,21 @@ const Form = ({ urlState }) => {
   const [password, setPassword] = useState();
 
   const onSubmit = () => {
-    if (location.pathname === "/login") {
-      dispatch(onLogin(email, password));
-      const token = localStorage.getItem("token");
-      if (token) {
-        navigate("/home");
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      if (location.pathname === "/login") {
+        dispatch(onLogin(email, password));
+        const token = localStorage.getItem("token");
+        if (token) {
+          navigate("/home");
+        }
+      } else if (location.pathname === "/signup") {
+        dispatch(onSignup(fullName, email, password, mobile));
+        setEmail("");
+        setPassword("");
+        navigate("/login");
       }
-    } else if (location.pathname === "/signup") {
-      dispatch(onSignup(fullName, email, password, mobile));
+    } else {
+      alert("You have entered an invalid email address!");
     }
   };
   return (
